@@ -18,8 +18,8 @@ open class PrincipalViewModelClass (): ViewModel() {
 
     private val repository = Repository
 
-    private var _conditionsInfo = MutableStateFlow( Conditions() )
-    val conditionsInfo: StateFlow<Conditions> = _conditionsInfo.asStateFlow()
+    private var _conditionsInfo = MutableStateFlow( listOf<ConditionInfo>() )
+    val conditionsInfo: StateFlow<List<ConditionInfo>> = _conditionsInfo.asStateFlow()
 
     private var _forecast = MutableStateFlow( Forecast() )
     var forecast: StateFlow<Forecast> = _forecast.asStateFlow()
@@ -43,7 +43,8 @@ open class PrincipalViewModelClass (): ViewModel() {
                 new.copy(
                     current = new.current.copy(
                         condition = new.current.condition.copy(
-                            text = getLanguageText( new.current.condition.code, ( new.current.isDay == 1 ) )
+                            text = getLanguageText( new.current.condition.code, ( new.current.isDay == 1 ) ),
+                            icon = "https:${new.current.condition.icon.replace("64x64", "128x128")}"
                         )
                     ),
                     forecast = new.forecast.copy(
@@ -51,18 +52,28 @@ open class PrincipalViewModelClass (): ViewModel() {
                             day.copy(
                                 day =  day.day.copy(
                                     condition = day.day.condition.copy(
-                                        text = getLanguageText( day.day.condition.code, true )
+                                        text = getLanguageText( day.day.condition.code, true ),
+                                        icon = "https:${day.day.condition.icon.replace("64x64", "128x128")}"
                                     )
                                 ),
                                 hour = day.hour.map { hour ->
                                     hour.copy(
                                         condition = hour.condition.copy(
-                                            text = getLanguageText( hour.condition.code, ( hour.isDay == 1 ) )
+                                            text = getLanguageText( hour.condition.code, ( hour.isDay == 1 ) ),
+                                            icon = "https:${hour.condition.icon.replace("64x64", "128x128")}"
                                         )
                                     )
                                 }
                             )
                         }
+                    ),
+                    // TODO: eliminar esto
+                    alerts = Alerts(
+                        alert = listOf(
+                            Alert(
+                                headline = "Esto es una alerta de prueba"
+                            )
+                        )
                     )
                 )
             }
@@ -73,9 +84,9 @@ open class PrincipalViewModelClass (): ViewModel() {
 
     fun getLanguageText( code: Int , day: Boolean ): String {
         var txt = ""
-        conditionsInfo.value.conditions.forEachIndexed { index, condition ->
+        conditionsInfo.value.forEachIndexed { index, condition ->
             if ( code == condition.code ){
-                conditionsInfo.value.conditions[ index ].languages.forEach { language ->
+                conditionsInfo.value[ index ].languages.forEach { language ->
                     if ( language.langIso == lang.language ){
                         txt = if ( day ) language.dayText else language.nightText
                     }
@@ -83,6 +94,12 @@ open class PrincipalViewModelClass (): ViewModel() {
             }
         }
         return txt
+    }
+
+    fun test( forecast: Forecast ){
+        _forecast.update {
+            forecast
+        }
     }
 
 }

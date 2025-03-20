@@ -261,10 +261,6 @@ data class Alert(
     val instruction: String = ""
 )
 
-data class Conditions(
-    val conditions: List<ConditionInfo> = emptyList()
-)
-
 data class ConditionInfo(
     val code: Int = 0,
     val day: String = "",

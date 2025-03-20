@@ -7,13 +7,14 @@ import java.util.Locale
 object Repository {
 
     private val weatherApiRetrofit = RetrofitProvider.getWeatherApiService()
+    private val weatherRetrofit = RetrofitProvider.getWeatherService()
 
     suspend fun getForecastByCity( cityName: String, lang: Locale ): Forecast {
         return weatherApiRetrofit.getForecastByCity( cityName = cityName, lang = lang.language )
     }
 
-    suspend fun getConditions(): Conditions {
-        return weatherApiRetrofit.getConditions()
+    suspend fun getConditions(): List<ConditionInfo> {
+        return weatherRetrofit.getConditions()
     }
 
 }
