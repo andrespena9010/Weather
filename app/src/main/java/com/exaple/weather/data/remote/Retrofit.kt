@@ -7,7 +7,7 @@ import retrofit2.http.*
 
 object RetrofitProvider {
 
-    private const val BASE_URL_WEATHER_API = "https://api.weatherapi.com/v1/"
+    private const val BASE_URL_WEATHER_API = "https://api.weatherapi.com/"
 
     private lateinit var retrofitWatherApiService: WeatherApiService
 
@@ -26,14 +26,18 @@ object RetrofitProvider {
 
 interface WeatherApiService {
 
-    @GET("forecast.json")
+    @GET("v1/forecast.json")
     suspend fun getForecastByCity(
         @Query("key") key: String = weatherApiKey,
         @Query("q") cityName: String,
+        @Query("lang") lang: String = "en",
         @Query("days") days: Int = 3,
         @Query("aqi") aqi: Boolean = false,
         @Query("alerts") alerts: Boolean = false
-    ): ForecastResponse
+    ): Forecast
+
+    @GET("docs/conditions.json")
+    suspend fun getConditions(): Conditions
 
 }
 

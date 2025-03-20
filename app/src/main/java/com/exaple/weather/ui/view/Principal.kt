@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.exaple.weather.ui.custom.SearchTextfieldBox
 import com.exaple.weather.ui.custom.WeatherView
@@ -20,7 +21,8 @@ import com.exaple.weather.ui.viewmodel.PrincipalViewModelClass
 fun Principal(
     viewModel: PrincipalViewModelClass = PrincipalViewModel
 ){
-    val city by viewModel.city.collectAsStateWithLifecycle()
+
+    val forecast by viewModel.forecast.collectAsStateWithLifecycle()
 
     Scaffold { paddings ->
         Column (
@@ -31,10 +33,13 @@ fun Principal(
             SearchTextfieldBox(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 20.dp)
             ){ cityName ->
-                viewModel.getForecastByName( cityName )
+                viewModel.updateForecastByName( cityName )
             }
-            WeatherView( city )
+            WeatherView(
+                forecast = forecast
+            )
         }
     }
 

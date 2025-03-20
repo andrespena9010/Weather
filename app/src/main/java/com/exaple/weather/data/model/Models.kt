@@ -2,36 +2,23 @@ package com.exaple.weather.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class City(
-    val name: String = "",
-    val forecast: ForecastResponse? = null
-)
-
-data class ForecastResponse(
-    @SerializedName("location")
+data class Forecast(
     val location: Location = Location(),
-    @SerializedName("current")
     val current: Current = Current(),
-    @SerializedName("forecast")
-    val forecast: Forecast = Forecast()
+    val forecast: ForecastInfo = ForecastInfo(),
+    val alerts: Alerts = Alerts()
 )
 
 data class Location(
-    @SerializedName("name")
     val name: String = "",
-    @SerializedName("region")
     val region: String = "",
-    @SerializedName("country")
     val country: String = "",
-    @SerializedName("lat")
     val lat: Double = 0.0,
-    @SerializedName("lon")
     val lon: Double = 0.0,
     @SerializedName("tz_id")
     val tzId: String = "",
     @SerializedName("localtime_epoch")
     val localtimeEpoch: Long = 0L,
-    @SerializedName("localtime")
     val localtime: String = ""
 )
 
@@ -46,7 +33,6 @@ data class Current(
     val tempF: Double = 0.0,
     @SerializedName("is_day")
     val isDay: Int = 0,
-    @SerializedName("condition")
     val condition: Condition = Condition(),
     @SerializedName("wind_mph")
     val windMph: Double = 0.0,
@@ -64,9 +50,7 @@ data class Current(
     val precipMm: Double = 0.0,
     @SerializedName("precip_in")
     val precipIn: Double = 0.0,
-    @SerializedName("humidity")
     val humidity: Int = 0,
-    @SerializedName("cloud")
     val cloud: Int = 0,
     @SerializedName("feelslike_c")
     val feelslikeC: Double = 0.0,
@@ -88,38 +72,32 @@ data class Current(
     val visKm: Double = 0.0,
     @SerializedName("vis_miles")
     val visMiles: Double = 0.0,
-    @SerializedName("uv")
     val uv: Double = 0.0,
     @SerializedName("gust_mph")
     val gustMph: Double = 0.0,
     @SerializedName("gust_kph")
-    val gustKph: Double = 0.0
+    val gustKph: Double = 0.0,
+    @SerializedName("air_quality")
+    val airQuality: AirQuality = AirQuality()
 )
 
 data class Condition(
-    @SerializedName("text")
     val text: String = "",
-    @SerializedName("icon")
     val icon: String = "",
-    @SerializedName("code")
     val code: Int = 0
 )
 
-data class Forecast(
+data class ForecastInfo(
     @SerializedName("forecastday")
-    val forecastDay: List<ForecastDay> = emptyList()
+    val forecastDays: List<ForecastDay> = emptyList()
 )
 
 data class ForecastDay(
-    @SerializedName("date")
     val date: String = "",
     @SerializedName("date_epoch")
     val dateEpoch: Long = 0L,
-    @SerializedName("day")
     val day: Day = Day(),
-    @SerializedName("astro")
     val astro: Astro = Astro(),
-    @SerializedName("hour")
     val hour: List<Hour> = emptyList()
 )
 
@@ -160,20 +138,16 @@ data class Day(
     val dailyWillItSnow: Int = 0,
     @SerializedName("daily_chance_of_snow")
     val dailyChanceOfSnow: Int = 0,
-    @SerializedName("condition")
     val condition: Condition = Condition(),
-    @SerializedName("uv")
-    val uv: Double = 0.0
+    val uv: Double = 0.0,
+    @SerializedName("air_quality")
+    val airQuality: AirQuality = AirQuality()
 )
 
 data class Astro(
-    @SerializedName("sunrise")
     val sunrise: String = "",
-    @SerializedName("sunset")
     val sunset: String = "",
-    @SerializedName("moonrise")
     val moonrise: String = "",
-    @SerializedName("moonset")
     val moonset: String = "",
     @SerializedName("moon_phase")
     val moonPhase: String = "",
@@ -188,7 +162,6 @@ data class Astro(
 data class Hour(
     @SerializedName("time_epoch")
     val timeEpoch: Long = 0L,
-    @SerializedName("time")
     val time: String = "",
     @SerializedName("temp_c")
     val tempC: Double = 0.0,
@@ -196,7 +169,6 @@ data class Hour(
     val tempF: Double = 0.0,
     @SerializedName("is_day")
     val isDay: Int = 0,
-    @SerializedName("condition")
     val condition: Condition = Condition(),
     @SerializedName("wind_mph")
     val windMph: Double = 0.0,
@@ -216,9 +188,7 @@ data class Hour(
     val precipIn: Double = 0.0,
     @SerializedName("snow_cm")
     val snowCm: Double = 0.0,
-    @SerializedName("humidity")
     val humidity: Int = 0,
-    @SerializedName("cloud")
     val cloud: Int = 0,
     @SerializedName("feelslike_c")
     val feelslikeC: Double = 0.0,
@@ -252,6 +222,64 @@ data class Hour(
     val gustMph: Double = 0.0,
     @SerializedName("gust_kph")
     val gustKph: Double = 0.0,
-    @SerializedName("uv")
-    val uv: Double = 0.0
+    val uv: Double = 0.0,
+    @SerializedName("air_quality")
+    val airQuality: AirQuality = AirQuality()
+)
+
+data class AirQuality(
+    val co: Double = 0.0,
+    val no2: Double = 0.0,
+    val o3: Double = 0.0,
+    val so2: Double = 0.0,
+    @SerializedName("pm2_5")
+    val pm2p5: Double = 0.0,
+    val pm10: Double = 0.0,
+    @SerializedName("us-epa-index")
+    val usEpaIndex: Int = 0,
+    @SerializedName("gb-defra-index")
+    val gbDefraIndex: Int = 0
+)
+
+data class Alerts(
+    val alert: List<Alert> = listOf()
+)
+
+data class Alert(
+    val headline: String = "",
+    val msgtype: String = "",
+    val severity: String = "",
+    val urgency: String = "",
+    val areas: String = "",
+    val category: String = "",
+    val certainty: String = "",
+    val event: String = "",
+    val note: String = "",
+    val effective: String = "",
+    val expires: String = "",
+    val desc: String = "",
+    val instruction: String = ""
+)
+
+data class Conditions(
+    val conditions: List<ConditionInfo> = emptyList()
+)
+
+data class ConditionInfo(
+    val code: Int = 0,
+    val day: String = "",
+    val night: String = "",
+    val icon: Int = 0,
+    val languages: List<Language> = emptyList()
+)
+
+data class Language(
+    @SerializedName("lang_name")
+    val langName: String = "",
+    @SerializedName("lang_iso")
+    val langIso: String = "",
+    @SerializedName("day_text")
+    val dayText: String = "",
+    @SerializedName("night_text")
+    val nightText: String = ""
 )
