@@ -30,6 +30,7 @@ open class PrincipalViewModelClass (): ViewModel() {
             _conditionsInfo.update {
                 repository.getConditions()
             }
+            updateForecastByName( cityName = "Burriana" ) // TODO: eliminar esto
         }
 
     }
@@ -43,7 +44,7 @@ open class PrincipalViewModelClass (): ViewModel() {
                 new.copy(
                     current = new.current.copy(
                         condition = new.current.condition.copy(
-                            text = getLanguageText( new.current.condition.code, ( new.current.isDay == 1 ) ),
+                            text = getLanguageText( new.current.condition.code, ( new.current.isDay == 1 ) ) ?: new.current.condition.text,
                             icon = "https:${new.current.condition.icon.replace("64x64", "128x128")}"
                         )
                     ),
@@ -52,14 +53,14 @@ open class PrincipalViewModelClass (): ViewModel() {
                             day.copy(
                                 day =  day.day.copy(
                                     condition = day.day.condition.copy(
-                                        text = getLanguageText( day.day.condition.code, true ),
+                                        text = getLanguageText( day.day.condition.code, true ) ?: day.day.condition.text,
                                         icon = "https:${day.day.condition.icon.replace("64x64", "128x128")}"
                                     )
                                 ),
                                 hour = day.hour.map { hour ->
                                     hour.copy(
                                         condition = hour.condition.copy(
-                                            text = getLanguageText( hour.condition.code, ( hour.isDay == 1 ) ),
+                                            text = getLanguageText( hour.condition.code, ( hour.isDay == 1 ) ) ?: hour.condition.text,
                                             icon = "https:${hour.condition.icon.replace("64x64", "128x128")}"
                                         )
                                     )
@@ -82,18 +83,17 @@ open class PrincipalViewModelClass (): ViewModel() {
 
     }
 
-    fun getLanguageText( code: Int , day: Boolean ): String {
-        var txt = ""
+    fun getLanguageText( code: Int , day: Boolean ): String? {
         conditionsInfo.value.forEachIndexed { index, condition ->
             if ( code == condition.code ){
                 conditionsInfo.value[ index ].languages.forEach { language ->
                     if ( language.langIso == lang.language ){
-                        txt = if ( day ) language.dayText else language.nightText
+                        return if ( day ) language.dayText else language.nightText
                     }
                 }
             }
         }
-        return txt
+        return null
     }
 
     fun test( forecast: Forecast ){

@@ -24,7 +24,7 @@ fun Principal(
     Scaffold { paddings ->
         Column (
             modifier = Modifier
-                .padding( paddings )
+                .padding(paddings)
                 .fillMaxSize()
         ) {
             SearchTextfieldBox(

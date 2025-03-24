@@ -1,6 +1,5 @@
 package com.exaple.weather.ui.custom
 
-import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -29,10 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,16 +45,6 @@ import com.exaple.weather.data.model.Forecast
 import com.exaple.weather.ui.viewmodel.PrincipalViewModel
 import com.exaple.weather.ui.viewmodel.PrincipalViewModelClass
 import com.google.gson.Gson
-
-fun Int.csp(): TextUnit {
-    val density = Resources.getSystem().displayMetrics.density.toDouble()
-    return ( this / (density / 2)  ).sp
-}
-
-fun Int.cdp(): Dp {
-    val density = Resources.getSystem().displayMetrics.density.toDouble()
-    return ( this / (density / 2) ).dp
-}
 
 @Composable
 fun WeatherView(
@@ -84,12 +72,12 @@ fun WeatherView(
             Container (
                 modifier = Modifier
                     .weight(10f)
-                    .padding(10.cdp())
+                    .padding(10.dp)
             ){
                 Column (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(5.cdp()),
+                        .padding(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
 
@@ -99,12 +87,13 @@ fun WeatherView(
                             text = getStringDayDate(
                                 isoDate = forecast.forecast.forecastDays[0].date,
                                 locale = locale
-                            )
+                            ),
+                            fontSize = 12.sp
                         )
 
                         TextWeater(
                             text = "${forecast.location.name}, ${forecast.location.region}, ${forecast.location.country}",
-                            fontSize = 40
+                            fontSize = 20.sp
                         )
 
                         if ( forecast.alerts.alert.isNotEmpty() ){
@@ -120,7 +109,7 @@ fun WeatherView(
                         ){
                             Column (
                                 modifier = Modifier
-                                    .padding(5.cdp())
+                                    .padding(5.dp)
                                     .weight(1f)
                                     .fillMaxHeight(),
                                 verticalArrangement = Arrangement.SpaceEvenly,
@@ -138,13 +127,12 @@ fun WeatherView(
                                         model = forecast.current.condition.icon,
                                         contentDescription = "",
                                         modifier = Modifier
-                                            .size(200.cdp()),
+                                            .size(100.dp),
                                         contentScale = ContentScale.Crop
                                     )
 
                                     TextWeater(
-                                        text = forecast.current.condition.text,
-                                        fontSize = 16
+                                        text = forecast.current.condition.text
                                     )
 
                                 }
@@ -158,7 +146,7 @@ fun WeatherView(
 
                                     TextWeater(
                                         text = "${forecast.current.tempC} ºC",
-                                        fontSize = 50
+                                        fontSize = 40.sp
                                     )
 
                                 }
@@ -176,14 +164,14 @@ fun WeatherView(
                                         Icon(
                                             painter = painterResource( R.drawable.arrow_down ),
                                             modifier = Modifier
-                                                .height( 20.cdp() ),
+                                                .height( 20.dp ),
                                             contentDescription = "Arrow Down",
                                             tint = Color( 0x770F0FFF )
                                         )
 
                                         TextWeater(
-                                            text = "${forecast.forecast.forecastDays[0].day.maxTempC}º",
-                                            fontSize = 30
+                                            text = "${forecast.forecast.forecastDays[0].day.minTempC}º",
+                                            fontSize = 20.sp
                                         )
 
                                     }
@@ -195,14 +183,14 @@ fun WeatherView(
                                         Icon(
                                             painter = painterResource( R.drawable.arrow_up ),
                                             modifier = Modifier
-                                                .height( 20.cdp() ),
+                                                .height( 20.dp ),
                                             contentDescription = "Arrow Down",
                                             tint = Color( 0x77FF0F0F )
                                         )
 
                                         TextWeater(
-                                            text = "${forecast.forecast.forecastDays[0].day.minTempC}º",
-                                            fontSize = 30
+                                            text = "${forecast.forecast.forecastDays[0].day.maxTempC}º",
+                                            fontSize = 20.sp
                                         )
 
                                     }
@@ -227,7 +215,7 @@ fun WeatherView(
                                     Icon(
                                         painter = painterResource( R.drawable.wind),
                                         modifier = Modifier
-                                            .height( 80.cdp() ),
+                                            .height( 40.dp ),
                                         contentDescription = "Wind",
                                         tint = Color( 0x77EFFEFF )
                                     )
@@ -236,8 +224,8 @@ fun WeatherView(
                                         text = "${forecast.current.windKph} Km/h\n" +
                                                 forecast.current.windDir,
                                         modifier = Modifier
-                                            .padding(5.cdp()),
-                                        fontSize = 20
+                                            .padding(5.dp),
+                                        fontSize = 20.sp
                                     )
 
                                 }
@@ -259,15 +247,15 @@ fun WeatherView(
                                         Image(
                                             painter = painterResource( R.drawable.sunrise),
                                             modifier = Modifier
-                                                .height( 80.cdp() ),
+                                                .height( 40.dp ),
                                             contentDescription = "Sunrise"
                                         )
 
                                         TextWeater(
                                             text = forecast.forecast.forecastDays[0].astro.sunrise,
                                             modifier = Modifier
-                                                .padding(5.cdp()),
-                                            fontSize = 20
+                                                .padding(5.dp),
+                                            fontSize = 20.sp
                                         )
 
                                     }
@@ -283,15 +271,15 @@ fun WeatherView(
                                         Image(
                                             painter = painterResource( R.drawable.sunset),
                                             modifier = Modifier
-                                                .height( 80.cdp() ),
+                                                .height( 40.dp ),
                                             contentDescription = "Sunset"
                                         )
 
                                         TextWeater(
                                             text = forecast.forecast.forecastDays[0].astro.sunset,
                                             modifier = Modifier
-                                                .padding(5.cdp()),
-                                            fontSize = 20
+                                                .padding(5.dp),
+                                            fontSize = 20.sp
                                         )
 
                                     }
@@ -321,29 +309,25 @@ fun WeatherView(
                         Container (
                             modifier = Modifier
                                 .padding(
-                                    start = 10.cdp(),
-                                    bottom = 10.cdp()
+                                    start = 10.dp,
+                                    bottom = 10.dp
                                 )
                         ){
 
                             Column (
                                 modifier = Modifier
-                                    .width(300.cdp())
+                                    .width(300.dp)
                                     .fillMaxHeight(),
                                 verticalArrangement = Arrangement.Top,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ){
 
                                 TextWeater(
-                                    text = getStringMonthDay( forecastDay.date, locale ),
-                                    modifier = Modifier
-                                        .padding( 5.cdp() )
+                                    text = getStringMonthDay( forecastDay.date, locale )
                                 )
 
                                 TextWeater(
-                                    text = forecastDay.day.condition.text,
-                                    modifier = Modifier
-                                        .padding( bottom = 5.cdp() )
+                                    text = forecastDay.day.condition.text
                                 )
 
                                 Row (
@@ -359,14 +343,14 @@ fun WeatherView(
                                         Icon(
                                             painter = painterResource( R.drawable.arrow_down ),
                                             modifier = Modifier
-                                                .height( 10.cdp() ),
+                                                .height( 10.dp ),
                                             contentDescription = "Arrow Down",
                                             tint = Color( 0x770F0FFF )
                                         )
 
                                         TextWeater(
-                                            text = "${forecastDay.day.maxTempC}º",
-                                            fontSize = 20
+                                            text = "${forecastDay.day.minTempC}º",
+                                            fontSize = 20.sp
                                         )
 
                                     }
@@ -378,14 +362,14 @@ fun WeatherView(
                                         Icon(
                                             painter = painterResource( R.drawable.arrow_up ),
                                             modifier = Modifier
-                                                .height( 10.cdp() ),
+                                                .height( 10.dp ),
                                             contentDescription = "Arrow Down",
                                             tint = Color( 0x77FF0F0F )
                                         )
 
                                         TextWeater(
-                                            text = "${forecastDay.day.minTempC}º",
-                                            fontSize = 20
+                                            text = "${forecastDay.day.maxTempC}º",
+                                            fontSize = 20.sp
                                         )
 
                                     }
@@ -396,7 +380,7 @@ fun WeatherView(
                                     model = forecastDay.day.condition.icon,
                                     contentDescription = "",
                                     modifier = Modifier
-                                        .size(50.cdp()),
+                                        .size(50.dp),
                                     contentScale = ContentScale.Crop
                                 )
 
@@ -423,7 +407,7 @@ fun Container(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(10.cdp()))
+            .clip(RoundedCornerShape(10.dp))
             .background( Color(0x33000000) ),
         contentAlignment = Alignment.Center
     ){
@@ -435,14 +419,14 @@ fun Container(
 fun TextWeater(
     text: String,
     modifier: Modifier = Modifier,
-    fontSize: Int = 16,
+    fontSize: TextUnit = 12.sp,
     color: Color = Color.White
 ){
     Text(
         text = text,
         modifier = modifier,
         color = color,
-        fontSize = fontSize.csp(),
+        fontSize = fontSize,
         textAlign = TextAlign.Center
     )
 }
@@ -451,31 +435,32 @@ fun TextWeater(
 fun TextWeaterAlert(
     text: String,
     modifier: Modifier = Modifier,
-    fontSize: Int = 16,
+    fontSize: TextUnit = 12.sp,
     color: Color = Color.White
 ){
 
     Row (
         modifier = Modifier
-            .clip(RoundedCornerShape(20.cdp()))
+            .clip(RoundedCornerShape(20.dp))
             .background( Color(0x22FFFF00) )
-            .height( 25.cdp() ),
+            .height( 20.dp ),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ){
 
         Image(
             painter = painterResource( R.drawable.advertencia ),
-            modifier = Modifier
-                .padding(2.cdp()),
             contentDescription = "Warning"
         )
 
         Text(
             text = text,
             modifier = modifier
-                .padding(end = 5.cdp()),
+                .padding(end = 5.dp),
             color = color,
-            fontSize = fontSize.csp(),
-            textAlign = TextAlign.Center
+            fontSize = fontSize,
+            textAlign = TextAlign.Center,
+            style = TextStyle(lineHeight = 0.sp)
         )
 
     }
@@ -500,10 +485,25 @@ fun getStringDayDate( isoDate: String , locale: Locale): String {
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Preview(
-    device = Devices.PIXEL_TABLET
+    device = "spec:width=840dp,height=474dp,dpi=640"
 )
 @Composable
-fun WeatherViewPreview(){
+fun D_960_540(){
+    WeatherTheme {
+        val viewModel = PrincipalViewModel
+        viewModel.test( Gson().fromJson( String( LocalContext.current.resources.openRawResource( R.raw.example_forecast_response ).readAllBytes() ), Forecast::class.java ) )
+        WeatherView(
+            viewModel = viewModel
+        )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Preview(
+    device = "spec:width=1280dp,height=800dp,dpi=320"
+)
+@Composable
+fun D_1280_800(){
     WeatherTheme {
         val viewModel = PrincipalViewModel
         viewModel.test( Gson().fromJson( String( LocalContext.current.resources.openRawResource( R.raw.example_forecast_response ).readAllBytes() ), Forecast::class.java ) )

@@ -53,11 +53,7 @@ fun SearchTextfieldBox(
             colors = TextFieldDefaults.colors(
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White,
-                focusedPlaceholderColor = Color(0x22000000),
-                unfocusedPlaceholderColor = Color(0x55000000)
+                disabledIndicatorColor = Color.Transparent
             ),
             trailingIcon = {
                 IconButton(
