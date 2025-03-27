@@ -294,29 +294,43 @@ fun WeatherView(
                 }
             }
 
-            LazyRow (
+            Container (
                 modifier = Modifier
                     .weight(4f)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(
+                        start = 10.dp,
+                        bottom = 10.dp,
+                        end = 10.dp
+                    )
             ){
 
-                itemsIndexed ( forecast.forecast.forecastDays ){ index, forecastDay ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.BottomStart
+                ){
+                    Image(
+                        painter = painterResource( R.drawable.weather_api_logo ),
+                        modifier = Modifier
+                            .height(20.dp)
+                            .padding(4.dp),
+                        contentDescription = "Api Logo"
+                    )
+                }
 
-                    if ( index != 0 ){
+                LazyRow (
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
 
-                        Container (
-                            modifier = Modifier
-                                .padding(
-                                    start = 10.dp,
-                                    bottom = 10.dp
-                                )
-                        ){
+                    itemsIndexed ( forecast.forecast.forecastDays ){ index, forecastDay ->
+
+                        if ( index != 0 ){
 
                             Column (
                                 modifier = Modifier
-                                    .width(300.dp)
+                                    .width(400.dp)
                                     .fillMaxHeight(),
                                 verticalArrangement = Arrangement.Top,
                                 horizontalAlignment = Alignment.CenterHorizontally
@@ -393,6 +407,7 @@ fun WeatherView(
                 }
 
             }
+
         }
 
     }

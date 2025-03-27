@@ -2,6 +2,15 @@ package com.exaple.weather.data.model
 
 import com.google.gson.annotations.SerializedName
 
+data class ApiErrorResponse(
+    val error: ApiError = ApiError()
+)
+
+data class ApiError(
+    val code: Int = 0,
+    val message: String = ""
+)
+
 data class Forecast(
     val location: Location = Location(),
     val current: Current = Current(),
